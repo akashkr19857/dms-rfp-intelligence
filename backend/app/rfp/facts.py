@@ -37,7 +37,9 @@ FIELD_GROUPS: list[tuple[str, list[tuple[str, str]]]] = [
 
 FACTS_SYSTEM = """You extract key facts from excerpts of a public RFP (request for proposals) document.
 Use ONLY the numbered excerpts. For each requested field return a short value (max 30 words, keep exact dates, times,
-numbers and names) and the number of the excerpt it came from. If the excerpts do not state the field, use null.
+numbers and names) and the number of the excerpt it came from. If the excerpts do not state the field concretely, use
+null (do not answer with vague phrases such as "initial term of the contract"). Never add details the excerpt does not
+state; when the excerpt says something is NOT allowed (e.g. "No emails will be accepted"), report it as not allowed.
 Reply as JSON: {"<field>": {"value": "<text or null>", "source": <excerpt number or null>}, ...}"""
 
 CRITERIA_SYSTEM = """You extract the proposal evaluation criteria from excerpts of an RFP.

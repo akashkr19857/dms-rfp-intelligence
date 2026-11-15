@@ -40,6 +40,26 @@ standard terms or needs negotiation or extra cost; low = needs attention). Use "
 Return at most 2 risks. If there is no real risk for this theme, return an empty list.
 Reply as JSON: {"risks": [ ... ]}"""
 
+VERIFY_SYSTEM = """You double-check one candidate bid risk found by another analyst. You get the RFP clause [R],
+our company's standard position [K] (may be empty) and the candidate risk.
+Answer "keep": false when ANY of these is true:
+- our position already satisfies the RFP clause (e.g. AWS GovCloud US-East/US-West IS inside the continental United
+  States; having a documented, tested disaster recovery plan satisfies "have and follow a disaster recovery plan";
+  keeping records longer than required satisfies a retention minimum);
+- it is a standard issuer right or boilerplate (right to reject proposals, no obligation to award, force majeure,
+  evaluation method) that creates no specific obligation or exposure for us;
+- the candidate misreads the clause.
+Otherwise answer "keep": true. Reply as JSON: {"keep": true|false, "reason": "<one sentence>"}"""
+
+
+def verify_risk(risk: dict, rhit, khits, counter: CallCounter | None = None) -> bool:  # noqa: ANN001
+    position = "\n".join(f"[K] {h.text[:700]}" for h in khits) or "(none)"
+    user = (f"RFP clause:\n[R] {rhit.text[:1100]}\n\nOur standard position:\n{position}\n\n"
+            f"Candidate risk: {risk['title']}: {risk['description']}")
+    data = llm_json(VERIFY_SYSTEM, user, counter, max_tokens=150)
+    return bool(data.get("keep", True))
+
+
 SEVERITIES = ("high", "medium", "low")
 CATS = ("legal", "commercial", "schedule", "technical", "compliance", "submission")
 
@@ -66,6 +86,10 @@ def detect_risks(doc_id: int, counter: CallCounter | None = None,
             src = pick(rhits, r.get("rfp_source")) or rhits[:1]
             sev = str(r.get("severity", "medium")).lower()
             cat = str(r.get("category", "compliance")).lower()
+            used_kb = pick(khits, r.get("kb_sources", [])) or khits
+            if not verify_risk({"title": title, "description": str(r.get("description", ""))}, src[0], used_kb, counter):
+                titles.discard(title.lower())
+                continue
             risks.append({"title": title, "theme": theme, "category": cat if cat in CATS else "compliance",
                           "severity": sev if sev in SEVERITIES else "medium",
                           "description": str(r.get("description", ""))[:800],

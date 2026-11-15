@@ -49,7 +49,14 @@ def responder(messages: list[dict]) -> str:
         req = user.split("RFP requirement:")[-1]
         status = "met" if "continental" in req else "gap" if ("180" in req or "indemnify" in req) else "unknown"
         return json.dumps({"status": status, "evidence": f"KB says so ({status}).", "sources": [1], "confidence": 0.9})
+    if "double-check one candidate bid risk" in system:
+        keep = "Data location" not in user  # the verifier rejects the false alarm below
+        return json.dumps({"keep": keep, "reason": "GovCloud is in the continental US" if not keep else "real conflict"})
     if "risk analyst" in system:
+        if "Hosting" in user:
+            return json.dumps({"risks": [{"title": "Data location conflict", "category": "compliance", "severity": "high",
+                                          "description": "RFP needs continental US hosting; we use AWS GovCloud.",
+                                          "recommendation": "Clarify.", "rfp_source": "R1", "kb_sources": ["K1"]}]})
         if "Liability" in user:
             return json.dumps({"risks": [{"title": "Uncapped indemnification", "category": "legal", "severity": "high",
                                           "description": "RFP requires indemnity without limitation; our cap is 12 months of fees.",
@@ -133,6 +140,7 @@ def test_full_analysis_pipeline(rfp, fake):
     assert next(r for r in reqs if "indemnify" in r.text).kind == "capability"
     assert [r.ref for r in reqs] == [f"R-{i:03d}" for i in range(1, len(reqs) + 1)]
     assert len(risks) == 1 and risks[0].severity == "high" and risks[0].page >= 1
+    assert risks[0].title == "Uncapped indemnification", "the verifier should have dropped the false data-location risk"
     s = a.bid_score
     assert s["counts"]["met"] == 1 and s["counts"]["gap"] == 2 and s["high_risks"] == 1
     assert s["recommendation"] in ("Bid", "Bid with conditions", "No bid") and 0 <= s["score"] <= 100

@@ -227,7 +227,7 @@ function Overview({ a, score, reqs, risks, showRfp }: { a: Analysis; score: BidS
             <ResponsiveContainer>
               <BarChart data={byCat} layout="vertical" margin={{ left: 10 }}>
                 <XAxis type="number" hide />
-                <YAxis type="category" dataKey="category" width={96} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis type="category" dataKey="category" width={96} interval={0} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
                 <Tooltip cursor={{ fill: "hsl(var(--muted))" }} />
                 <Bar dataKey="n" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
               </BarChart>
