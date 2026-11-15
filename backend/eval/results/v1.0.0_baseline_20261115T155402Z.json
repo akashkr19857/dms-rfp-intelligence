@@ -1,0 +1,893 @@
+{
+ "release": "v1.0.0",
+ "label": "baseline",
+ "created_at": "2026-11-15T15:54:02.733664+00:00",
+ "hardware": "NVIDIA GeForce RTX 4060 Laptop GPU, Intel64 Family 6 Model 154 Stepping 3, GenuineIntel, Windows 10; LLM qwen2.5:7b (Ollama), embeddings nomic-embed-text, reranker BAAI/bge-reranker-base",
+ "config": {
+  "llm": "qwen2.5:7b",
+  "embed": "nomic-embed-text",
+  "reranker": "BAAI/bge-reranker-base",
+  "retrieval": "hybrid",
+  "top_k": 5
+ },
+ "metrics": {
+  "facts": {
+   "accuracy": 1.0,
+   "n": 15
+  },
+  "requirements": {
+   "recall": 0.8666666666666667,
+   "n": 30,
+   "extracted_total": 90,
+   "capability": 72,
+   "submission": 18
+  },
+  "compliance": {
+   "accuracy": 0.9285714285714286,
+   "judged": 14,
+   "n": 17
+  },
+  "risks": {
+   "recall": 0.8571428571428571,
+   "n": 7,
+   "detected_total": 11,
+   "high": 3
+  },
+  "qa": {
+   "correctness": 0.8571428571428571,
+   "fully_correct": 0.7857142857142857,
+   "retrieval_hit@5": 0.9166666666666666,
+   "not_found_accuracy": 1.0,
+   "false_refusals": 1,
+   "latency_p50_ms": 872.0,
+   "latency_p95_ms": 9499.29999999998,
+   "n": 15
+  },
+  "analysis": [
+   {
+    "doc": "champaign_CCMS.pdf",
+    "pages": 30,
+    "chunks": 152,
+    "seconds": 496.1,
+    "timings": {
+     "facts": 56.5,
+     "criteria": 10.5,
+     "requirements": 176.1,
+     "compliance": 174.4,
+     "risks": 78.6,
+     "score": 0.0,
+     "total": 496.1
+    },
+    "llm_calls": 118,
+    "requirements": 90,
+    "risks": 11,
+    "bid_score": 57.8,
+    "recommendation": "Bid with conditions"
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "pages": 17,
+    "chunks": 67,
+    "seconds": 456.5,
+    "timings": {
+     "facts": 26.7,
+     "criteria": 12.0,
+     "requirements": 179.7,
+     "compliance": 187.4,
+     "risks": 50.7,
+     "score": 0.0,
+     "total": 456.5
+    },
+    "llm_calls": 110,
+    "requirements": 86,
+    "risks": 12,
+    "bid_score": 55.9,
+    "recommendation": "Bid with conditions"
+   },
+   {
+    "doc": "tacoma_PI24-0143F.pdf",
+    "pages": 53,
+    "chunks": 184,
+    "seconds": 942.6,
+    "timings": {
+     "facts": 26.8,
+     "criteria": 21.5,
+     "requirements": 402.1,
+     "compliance": 431.1,
+     "risks": 61.1,
+     "score": 0.0,
+     "total": 942.6
+    },
+    "llm_calls": 246,
+    "requirements": 207,
+    "risks": 12,
+    "bid_score": 46.1,
+    "recommendation": "No bid"
+   }
+  ]
+ },
+ "details": {
+  "facts": [
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "issuer",
+    "value": "Champaign County (IL)",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "submission_deadline",
+    "value": "August 28, 2025, at 4pm CT",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "questions_deadline",
+    "value": "July 29, 2025",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "pre_proposal_meeting",
+    "value": "Tuesday, July 15, 2025, at 2pm CT, not mandatory",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "contact",
+    "value": "BerryDunn (Kate Offerdahl-Joyce – kate.offerdahl-joyce@berrydunn.com)",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "submission_method",
+    "value": "hard copy and electronic version on separate removable devices",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "proposal_validity",
+    "value": "180 calendar days",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "deployment_model",
+    "value": "Software as a Service (SaaS) with preference, On Premise, Proposer hosted, and SaaS models considered",
+    "correct": true
+   },
+   {
+    "doc": "champaign_CCMS.pdf",
+    "field": "target_go_live",
+    "value": "January 2026 - December 2026",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "issuer",
+    "value": "City of Detroit Office of Contracting and Procurement (OCP)",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "rfp_number",
+    "value": "RFP 184578-2",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "submission_deadline",
+    "value": "July 8, 2024 @ 3pm EDT",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "questions_deadline",
+    "value": "Friday June 21, 2024, by 3pm EDT",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "pre_proposal_meeting",
+    "value": "Tuesday, May 7, 2024, at 11am EDT",
+    "correct": true
+   },
+   {
+    "doc": "detroit_RFP184578.pdf",
+    "field": "submission_method",
+    "value": "online in the Supplier Portal",
+    "correct": true
+   }
+  ],
+  "requirements": [
+   {
+    "id": "hosting-us",
+    "page": 12,
+    "found": true,
+    "match": "Proposer must clearly define the proposed deployment model, including licensing and hosting location.",
+    "match_ref": "R-020"
+   },
+   {
+    "id": "hard-copy",
+    "page": 24,
+    "found": true,
+    "match": "Proposer must submit one (1) hard copy original of the Technical Proposal and Price Proposal in separate three-ring binders.",
+    "match_ref": "R-058"
+   },
+   {
+    "id": "usb",
+    "page": 24,
+    "found": true,
+    "match": "Proposers must submit one (1) electronic version of the Technical Proposal and one (1) electronic version of the Price Proposal on separate removable devices.",
+    "match_ref": "R-059"
+   },
+   {
+    "id": "no-email",
+    "page": 24,
+    "found": true,
+    "match": "Proposers must notify the County via email of the need to submit an amendment prior to the deadline.",
+    "match_ref": "R-061"
+   },
+   {
+    "id": "excel-attachments",
+    "page": 24,
+    "found": true,
+    "match": "Proposals must be submitted in Adobe PDF format and Microsoft Excel format as specified in Table 12.",
+    "match_ref": "R-060"
+   },
+   {
+    "id": "validity-180",
+    "page": 22,
+    "found": true,
+    "match": "Proposer must notify the County at least 180 days in advance of requesting a price change in an extension period.",
+    "match_ref": "R-048"
+   },
+   {
+    "id": "pm-plan",
+    "page": 15,
+    "found": true,
+    "match": "Proposer must develop and provide a detailed project management plan including objectives, deliverables, milestones, project schedule, and resource management processes.",
+    "match_ref": "R-026"
+   },
+   {
+    "id": "data-conversion",
+    "page": 13,
+    "found": true,
+    "match": "Proposer must provide a data conversion plan, including strategies for legacy case data management.",
+    "match_ref": "R-023"
+   },
+   {
+    "id": "training-plan",
+    "page": 16,
+    "found": false,
+    "match": null,
+    "match_ref": null
+   },
+   {
+    "id": "risk-register",
+    "page": 16,
+    "found": false,
+    "match": null,
+    "match_ref": null
+   },
+   {
+    "id": "upgrades",
+    "page": 16,
+    "found": true,
+    "match": "Contractor must provide software upgrades at no cost to the County.",
+    "match_ref": "R-029"
+   },
+   {
+    "id": "quarterly-review",
+    "page": 17,
+    "found": true,
+    "match": "Contractor must meet with the County’s Project Manager quarterly for performance reviews.",
+    "match_ref": "R-030"
+   },
+   {
+    "id": "personnel",
+    "page": 16,
+    "found": true,
+    "match": "Contractor must ensure all personnel possess necessary skills, experience, and knowledge to perform assigned duties.",
+    "match_ref": "R-027"
+   },
+   {
+    "id": "indemnify",
+    "page": 27,
+    "found": true,
+    "match": "Vendor must indemnify, defend, and hold Champaign County, Illinois, harmless from claims arising from the breach of warranties.",
+    "match_ref": "R-068"
+   },
+   {
+    "id": "records-3y",
+    "page": 27,
+    "found": true,
+    "match": "Proposer must maintain detailed records of services rendered for three years.",
+    "match_ref": "R-069"
+   },
+   {
+    "id": "signature",
+    "page": 27,
+    "found": true,
+    "match": "Proposer must provide executed proposal by vendor or authorized representative.",
+    "match_ref": "R-070"
+   },
+   {
+    "id": "confidential",
+    "page": 28,
+    "found": true,
+    "match": "Proposer must maintain confidentiality of County's proprietary information.",
+    "match_ref": "R-075"
+   },
+   {
+    "id": "data-return-15",
+    "page": 30,
+    "found": true,
+    "match": "Proposer must make available all County data stored within the system, on servers, or in custody to the County within 15 days of termination or request, in a machine-readable format.",
+    "match_ref": "R-086"
+   },
+   {
+    "id": "dr-plan",
+    "page": 30,
+    "found": true,
+    "match": "Proposer must have and follow a disaster recovery plan.",
+    "match_ref": "R-088"
+   },
+   {
+    "id": "daily-backup",
+    "page": 30,
+    "found": true,
+    "match": "Proposer must back up all County data daily to an offsite hardened facility if applicable.",
+    "match_ref": "R-090"
+   },
+   {
+    "id": "continental-us",
+    "page": 30,
+    "found": true,
+    "match": "Proposer must store and process County data within the continental United States.",
+    "match_ref": "R-089"
+   },
+   {
+    "id": "deployment-model",
+    "page": 12,
+    "found": true,
+    "match": "Proposer must clearly define the proposed deployment model, including licensing and hosting location.",
+    "match_ref": "R-020"
+   },
+   {
+    "id": "county-resources",
+    "page": 12,
+    "found": true,
+    "match": "Proposers must clearly indicate the estimated level of County resource involvement in the implementation process.",
+    "match_ref": "R-019"
+   },
+   {
+    "id": "go-live-dates",
+    "page": 13,
+    "found": true,
+    "match": "Proposer must provide potential phase start and target go-live dates in the proposal.",
+    "match_ref": "R-025"
+   },
+   {
+    "id": "no-contact",
+    "page": 8,
+    "found": true,
+    "match": "Proposer must not contact County staff directly with questions.",
+    "match_ref": "R-012"
+   },
+   {
+    "id": "non-discrimination",
+    "page": 28,
+    "found": false,
+    "match": null,
+    "match_ref": null
+   },
+   {
+    "id": "patents",
+    "page": 29,
+    "found": true,
+    "match": "Proposer must protect the County from claims involving infringements of patents and/or copyrights.",
+    "match_ref": "R-083"
+   },
+   {
+    "id": "demonstrations",
+    "page": 19,
+    "found": true,
+    "match": "Proposers must adhere to provided scripts during system demonstrations.",
+    "match_ref": "R-031"
+   },
+   {
+    "id": "no-subset",
+    "page": 11,
+    "found": false,
+    "match": null,
+    "match_ref": null
+   },
+   {
+    "id": "prime-vendor",
+    "page": 11,
+    "found": true,
+    "match": "Proposers engaged in partnership relationships must submit a single proposal.",
+    "match_ref": "R-017"
+   }
+  ],
+  "compliance": [
+   {
+    "id": "hosting-us",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must clearly define the proposed deployment model, including licensing and hosting location.",
+    "evidence": "NimbusCourt is offered as SaaS on AWS GovCloud and can be deployed on-premise with perpetual licenses, and the licensing and hosting location are clearly defined.",
+    "correct": true
+   },
+   {
+    "id": "continental-us",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must store and process County data within the continental United States.",
+    "evidence": "NimbusCourt stores and processes all customer data only within the continental United States, as stated in K1 and K2.",
+    "correct": true
+   },
+   {
+    "id": "dr-plan",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must have and follow a disaster recovery plan.",
+    "evidence": "Nimbus maintains a documented disaster recovery plan that is tested twice a year.",
+    "correct": true
+   },
+   {
+    "id": "daily-backup",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must back up all County data daily to an offsite hardened facility if applicable.",
+    "evidence": "Nimbus backs up all customer data daily and replicates backups to a separate, hardened offsite facility (AWS GovCloud US-West).",
+    "correct": true
+   },
+   {
+    "id": "upgrades",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Contractor must provide software upgrades at no cost to the County.",
+    "evidence": "Nimbus provides all new versions and upgrades of NimbusCourt at no additional cost to customers with an active SaaS subscription or maintenance agreement.",
+    "correct": true
+   },
+   {
+    "id": "quarterly-review",
+    "expected": [
+     "met"
+    ],
+    "predicted": "partial",
+    "requirement": "Contractor must meet with the County’s Project Manager quarterly for performance reviews.",
+    "evidence": "The requirement is met with a different frequency; Nimbus holds quarterly business reviews, while the RFP requires quarterly meetings.",
+    "correct": false
+   },
+   {
+    "id": "personnel",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Contractor must ensure all personnel possess necessary skills, experience, and knowledge to perform assigned duties.",
+    "evidence": "The company has a Business Process and Training Lead with 8 years of court business process optimisation and training experience, and a structured testing and training methodology.",
+    "correct": true
+   },
+   {
+    "id": "records-3y",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must maintain detailed records of services rendered for three years.",
+    "evidence": "Nimbus keeps project and billing records for 7 years after final payment, which exceeds the RFP requirement of three years.",
+    "correct": true
+   },
+   {
+    "id": "pm-plan",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must develop and provide a detailed project management plan including objectives, deliverables, milestones, project schedule, and resource management processes.",
+    "evidence": "Nimbus provides a Project Management Plan as part of every project, which includes objectives, deliverables, milestones, schedule, and resource management processes.",
+    "correct": true
+   },
+   {
+    "id": "training-plan",
+    "expected": [
+     "met"
+    ],
+    "predicted": null,
+    "correct": null
+   },
+   {
+    "id": "risk-register",
+    "expected": [
+     "met"
+    ],
+    "predicted": null,
+    "correct": null
+   },
+   {
+    "id": "data-conversion",
+    "expected": [
+     "met"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must provide a data conversion plan, including strategies for legacy case data management.",
+    "evidence": "Nimbus provides a Data Conversion Plan as part of their Project Management Deliverables.",
+    "correct": true
+   },
+   {
+    "id": "patents",
+    "expected": [
+     "met",
+     "partial"
+    ],
+    "predicted": "met",
+    "requirement": "Proposer must protect the County from claims involving infringements of patents and/or copyrights.",
+    "evidence": "Nimbus indemnifies customers against third-party intellectual property infringement claims.",
+    "correct": true
+   },
+   {
+    "id": "validity-180",
+    "expected": [
+     "gap",
+     "partial"
+    ],
+    "predicted": "gap",
+    "requirement": "Proposer must notify the County at least 180 days in advance of requesting a price change in an extension period.",
+    "evidence": "The requirement is for 180 days notice, but the company policy only provides 90 days unless approved by the CFO.",
+    "correct": true
+   },
+   {
+    "id": "data-return-15",
+    "expected": [
+     "gap",
+     "partial"
+    ],
+    "predicted": "partial",
+    "requirement": "Proposer must make available all County data stored within the system, on servers, or in custody to the County within 15 days of termination or request, in a machine-readable format.",
+    "evidence": "Nimbus provides a full export of customer data within 30 days, not 15 days as required.",
+    "correct": true
+   },
+   {
+    "id": "indemnify",
+    "expected": [
+     "gap",
+     "partial"
+    ],
+    "predicted": "partial",
+    "requirement": "Vendor must indemnify, defend, and hold Champaign County, Illinois, harmless from claims arising from the breach of warranties.",
+    "evidence": "Nimbus provides uncapped indemnification for other matters, but it requires legal review and executive approval, which may not be guaranteed for every claim.",
+    "correct": true
+   },
+   {
+    "id": "no-subset",
+    "expected": [
+     "gap",
+     "partial"
+    ],
+    "predicted": null,
+    "correct": null
+   }
+  ],
+  "risks": [
+   {
+    "id": "indemnification",
+    "found": true,
+    "match": "Uncapped Indemnification Obligation",
+    "severity": "high"
+   },
+   {
+    "id": "validity",
+    "found": true,
+    "match": "180-day validity period",
+    "severity": "medium"
+   },
+   {
+    "id": "data-return",
+    "found": true,
+    "match": "Data ownership and exit terms",
+    "severity": "medium"
+   },
+   {
+    "id": "schedule",
+    "found": true,
+    "match": "Potential Phasing and Target Live Dates",
+    "severity": "medium"
+   },
+   {
+    "id": "jury-scope",
+    "found": true,
+    "match": "Scope Limitation - Jury Management",
+    "severity": "medium"
+   },
+   {
+    "id": "governing-law",
+    "found": true,
+    "match": "Uncapped Indemnification Obligation",
+    "severity": "high"
+   },
+   {
+    "id": "submission-format",
+    "found": false,
+    "match": null,
+    "severity": null
+   }
+  ],
+  "qa": [
+   {
+    "id": "q01",
+    "question": "When are proposals due for the Champaign County court case management system RFP?",
+    "reference": "Thursday, August 28, 2025 at 4:00 p.m. Central Time.",
+    "answer": "Proposals must be received by Champaign County, by the date and time cited above, which is Thursday, August 28, 2025, at 4:00 p.m. (Central Time). [1]",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference answer exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 1
+     }
+    ],
+    "latency_ms": 22849
+   },
+   {
+    "id": "q02",
+    "question": "Who should vendors send questions about the Champaign County RFP to?",
+    "reference": "By email only to BerryDunn, Kate Offerdahl-Joyce (kate.offerdahl-joyce@berrydunn.com).",
+    "answer": "Vendors should send all questions concerning the RFP via email only, to BerryDunn (Kate Offerdahl-Joyce – kate.offerdahl-joyce@berrydunn.com) [2][3].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer accurately reflects the reference answer.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 7
+     },
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 11
+     }
+    ],
+    "latency_ms": 3778
+   },
+   {
+    "id": "q03",
+    "question": "Which deployment model does Champaign County prefer?",
+    "reference": "A Software as a Service (SaaS) model, though it will consider on-premise and proposer-hosted models.",
+    "answer": "Champaign County has a preference toward a Software as a Service (SaaS) deployment model [1].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer accurately states Champaign County's preference for SaaS without contradicting the reference.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 12
+     }
+    ],
+    "latency_ms": 691
+   },
+   {
+    "id": "q04",
+    "question": "How long must proposals remain valid?",
+    "reference": "A minimum of 180 calendar days after the proposal due date.",
+    "answer": "Proposals must remain valid for a minimum period of 180 calendar days following the date established for receiving bids/proposals, unless otherwise specified [1].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 22
+     }
+    ],
+    "latency_ms": 845
+   },
+   {
+    "id": "q05",
+    "question": "How many points is the Functionality criterion worth in short-list scoring?",
+    "reference": "35 points.",
+    "answer": "The Functionality criterion is worth 35 points in short-list scoring. [1]",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 19
+     }
+    ],
+    "latency_ms": 625
+   },
+   {
+    "id": "q06",
+    "question": "What legacy system does Champaign County use today?",
+    "reference": "JANO Technologies eMagnus MultiCourt, deployed in 2008 on an IBM iSeries AS400 with a DB2 database.",
+    "answer": "I could not find this in the documents you have access to.",
+    "not_found": true,
+    "score": 0.0,
+    "reason": "false refusal",
+    "hit@5": false,
+    "citations": [],
+    "latency_ms": 474
+   },
+   {
+    "id": "q07",
+    "question": "Within how many days must the contractor make County data available after termination?",
+    "reference": "Within fifteen (15) days, in a machine-readable format, at no cost.",
+    "answer": "According to the RFP, the contractor must make available to the County, at no cost, all County data stored within the system, stored on the Contractor’s servers, or within the Contractor’s custody, within fifteen (15) days of termination or County request [1][4].",
+    "not_found": false,
+    "score": 0.5,
+    "reason": "The candidate answer includes the correct timeframe and cost, but it adds unnecessary details not present in the reference.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 30
+     },
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 30
+     }
+    ],
+    "latency_ms": 3716
+   },
+   {
+    "id": "q08",
+    "question": "How many named users does the County expect?",
+    "reference": "Approximately 92 named users.",
+    "answer": "The County expects approximately 92 named users [1].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 13
+     }
+    ],
+    "latency_ms": 2740
+   },
+   {
+    "id": "q09",
+    "question": "When does the County want to go live?",
+    "reference": "Implementation would begin in January 2026 with a target go-live of December 2026 for all modules.",
+    "answer": "The County would like to target December 2026 as a potential go-live date for all modules. [1]",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer accurately captures the key facts from the reference.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 14
+     }
+    ],
+    "latency_ms": 756
+   },
+   {
+    "id": "q10",
+    "question": "Where must County data be stored and processed?",
+    "reference": "Only within the continental United States.",
+    "answer": "County data must be stored and processed within the continental United States. [1][3]",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 30
+     },
+     {
+      "doc": "Champaign County (IL) - Court Case Management System RFP (2025)",
+      "page": 30
+     }
+    ],
+    "latency_ms": 584
+   },
+   {
+    "id": "q11",
+    "question": "When are proposals due for Detroit RFP 184578-2 and where are they submitted?",
+    "reference": "July 8, 2024 at 3pm EDT, uploaded in the City's Supplier Portal.",
+    "answer": "Proposals are due on July 8, 2024, at 3pm EDT and must be submitted in the Supplier Portal as specified in Section 4.5 of the RFP [1][2].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the key facts in the reference.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "City of Detroit - Physical Records Management Software RFP 184578",
+      "page": 1
+     },
+     {
+      "doc": "City of Detroit - Physical Records Management Software RFP 184578",
+      "page": 1
+     }
+    ],
+    "latency_ms": 1226
+   },
+   {
+    "id": "q12",
+    "question": "When was the Detroit pre-proposal conference held?",
+    "reference": "Tuesday, May 7, 2024 at 11am EDT on MS Teams.",
+    "answer": "The Detroit pre-proposal conference was held on Tuesday, May 7, 2024, at 11am EDT [1].",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer matches the reference exactly.",
+    "hit@5": true,
+    "citations": [
+     {
+      "doc": "City of Detroit - Physical Records Management Software RFP 184578",
+      "page": 1
+     }
+    ],
+    "latency_ms": 872
+   },
+   {
+    "id": "q13",
+    "question": "What is our recovery point objective and recovery time objective?",
+    "reference": "RPO of 1 hour and RTO of 4 hours.",
+    "answer": "Our recovery point objective (RPO) is 1 hour and our recovery time objective (RTO) is 4 hours. [1]",
+    "not_found": false,
+    "score": 1.0,
+    "reason": "The candidate answer accurately matches the reference with correct RPO and RTO values.",
+    "hit@5": null,
+    "citations": [
+     {
+      "doc": "Security, Hosting and DR Policy (Nimbus, fictional)",
+      "page": 4
+     }
+    ],
+    "latency_ms": 1084
+   },
+   {
+    "id": "q14",
+    "question": "How long are our proposals valid by default?",
+    "reference": "90 days from the submission date unless the CFO approves longer.",
+    "answer": "Nimbus proposals are valid for 90 days from the submission date unless the bid team obtains written approval from the CFO for a longer validity period. [1]",
+    "not_found": false,
+    "score": 0.5,
+    "reason": "The candidate answer includes the key facts but adds unnecessary details that are not in the reference.",
+    "hit@5": null,
+    "citations": [
+     {
+      "doc": "Standard Commercial Terms (Nimbus, fictional)",
+      "page": 2
+     }
+    ],
+    "latency_ms": 1037
+   },
+   {
+    "id": "q15",
+    "question": "What liquidated damages per day does the Champaign County RFP impose for late delivery?",
+    "reference": "NOT_FOUND",
+    "answer": "I could not find this in the documents you have access to.",
+    "not_found": true,
+    "score": 1.0,
+    "reason": "correctly refused",
+    "hit@5": null,
+    "citations": [],
+    "latency_ms": 438
+   }
+  ]
+ }
+}

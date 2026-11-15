@@ -173,7 +173,7 @@ function Overview({ a, score, reqs, risks, showRfp }: { a: Analysis; score: BidS
   const checklist = reqs.filter((r) => r.kind === "submission").length;
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="grid gap-4 md:grid-cols-[230px_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1fr)]">
         <Card>
           <CardHeader><CardTitle>Bid / no-bid</CardTitle><CardDescription>Compliance with mandatory requirements and risk exposure</CardDescription></CardHeader>
           <CardContent className="space-y-3">
@@ -192,12 +192,12 @@ function Overview({ a, score, reqs, risks, showRfp }: { a: Analysis; score: BidS
         <Card>
           <CardHeader><CardTitle>Key facts</CardTitle><CardDescription>Extracted from the RFP; click a page to verify</CardDescription></CardHeader>
           <CardContent>
-            <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2" data-testid="key-facts">
+            <dl className="grid gap-x-6 gap-y-2 text-sm 2xl:grid-cols-2" data-testid="key-facts">
               {FACT_LABELS.map(([k, label]) => {
                 const f = a.facts[k];
                 if (!f?.value) return null;
                 return (
-                  <div key={k} className={cn("min-w-0", k === "scope_summary" && "sm:col-span-2")}>
+                  <div key={k} className={cn("min-w-0", k === "scope_summary" && "2xl:col-span-2")}>
                     <dt className="flex items-center gap-1 text-xs text-muted-foreground">{k === "submission_deadline" && <CalendarClock className="h-3 w-3 text-primary" />}{label}</dt>
                     <dd className="flex items-start gap-1.5"><span className="min-w-0">{f.value}</span><PageLink page={f.page} onClick={() => showRfp(f.page, f.chunk_id)} /></dd>
                   </div>

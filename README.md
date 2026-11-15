@@ -50,7 +50,25 @@ page-level references.
 
 ## Results (measured)
 
-RESULTS_TABLE
+Hardware: **NVIDIA RTX 4060 Laptop GPU (8 GB)**, Intel i5-12450H, Windows 11 · LLM `qwen2.5:7b` via Ollama (local) ·
+answer key hand-labelled from the real RFP text ([`backend/eval/gold_rfp.json`](backend/eval/gold_rfp.json)).
+
+| What | Result | Measured on |
+|---|---|---|
+| Key-fact extraction accuracy | **100%** (15/15) | deadlines, contacts, validity, deployment, timeline, 2 RFPs |
+| Requirement extraction recall | **87%** (26/30) | 30 labelled Champaign County requirements, page must match ±1 |
+| Compliance status accuracy | **93%** (13/14) | labelled met / partial / gap statuses vs the knowledge base |
+| Risk detection recall | **86%** (6/7) | labelled risks (uncapped indemnity, 180-day validity, 15-day data exit, ...) |
+| Grounded Q&A correctness | **86%** (LLM judge; 11/14 fully correct) | 14 answerable questions |
+| Retrieval hit@5 (gold page in top 5) | **92%** (11/12) | questions with a known source page |
+| Unanswerable question correctly refused | **100%** (1/1), 1 false refusal | |
+| Q&A latency | **0.9 s** median, 9.5 s p95 | warm models |
+
+| Full analysis per RFP | Pages | Time | LLM calls | Requirements | Risks | Bid score |
+|---|---|---|---|---|---|---|
+| Champaign County, Court Case Management System | 30 | 8.3 min | 118 | 90 | 11 | 57.8 · Bid with conditions |
+| City of Detroit, Records Management Software | 17 | 7.6 min | 110 | 86 | 12 | 55.9 · Bid with conditions |
+| City of Tacoma, FERC Document Management System | 53 | 15.7 min | 246 | 207 | 12 | 46.1 · No bid |
 
 Full per-item results (every requirement, status, risk and answer): **Evaluation** page in the app, or
 [`backend/eval/results/`](backend/eval/results). Method and caveats: [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
@@ -116,10 +134,10 @@ Unit tests use a scripted fake LLM, embedder and reranker, so they run in second
 
 ## Limitations & roadmap
 
-* A 7B local model is fast and private but not perfect: about 1 in 8 labelled requirements is missed and compliance
+* A 7B local model is fast and private but not perfect: 4 of 30 labelled requirements were missed and compliance
   needs human review, which is why every status can be overridden. A larger model (or an API model behind the same
   interface) improves recall.
-* Analysis takes ~9 minutes for a 30-page RFP on a laptop GPU; batching on a server GPU or vLLM would cut this sharply.
+* Analysis takes ~8 minutes for a 30-page RFP on a laptop GPU; batching on a server GPU or vLLM would cut this sharply.
 * Next: Excel requirement-matrix import/export (many RFPs ship Attachment B as .xlsx), clause library for past answers,
   SSO, multi-tenant workspaces.
 
