@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     llm_provider: str = "ollama"
     embed_provider: str = "ollama"
     rerank_provider: str = "cross-encoder"  # cross-encoder | onnx | overlap (tests) | none
+    rerank_device: str = "auto"  # auto | cuda | cpu
 
     ollama_url: str = "http://localhost:11434"
     llm_model: str = "qwen2.5:7b"

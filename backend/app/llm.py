@@ -9,6 +9,7 @@ from typing import Callable, Iterator, Protocol
 import httpx
 
 from .config import get_settings
+from .retry import post_with_retry
 
 
 @dataclass
@@ -42,8 +43,7 @@ class OllamaLLM:
     def chat(self, messages: list[dict], *, json_mode: bool = False, temperature: float | None = None,
              max_tokens: int = 800) -> LLMResult:
         t0 = time.perf_counter()
-        r = self._client.post(f"{self.url}/api/chat", json=self._body(messages, False, json_mode, temperature, max_tokens))
-        r.raise_for_status()
+        r = post_with_retry(self._client, f"{self.url}/api/chat", self._body(messages, False, json_mode, temperature, max_tokens))
         d = r.json()
         return LLMResult(d["message"]["content"], d.get("prompt_eval_count", 0), d.get("eval_count", 0),
                          (time.perf_counter() - t0) * 1000)

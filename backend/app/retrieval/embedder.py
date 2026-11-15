@@ -10,6 +10,7 @@ import httpx
 import numpy as np
 
 from ..config import get_settings
+from ..retry import post_with_retry
 
 
 class Embedder(Protocol):
@@ -31,9 +32,8 @@ class OllamaEmbedder:
     def _embed(self, inputs: list[str]) -> list[list[float]]:
         out: list[list[float]] = []
         for i in range(0, len(inputs), self.batch):
-            r = self._client.post(f"{self.url}/api/embed", json={"model": self.model, "input": inputs[i:i + self.batch],
-                                                                  "truncate": True, "keep_alive": "30m"})
-            r.raise_for_status()
+            r = post_with_retry(self._client, f"{self.url}/api/embed", {"model": self.model, "input": inputs[i:i + self.batch],
+                                                                        "truncate": True, "keep_alive": "30m"})
             out.extend(r.json()["embeddings"])
         return out
 
