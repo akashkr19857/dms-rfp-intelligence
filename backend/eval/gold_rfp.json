@@ -1,0 +1,110 @@
+{
+  "_note": "Hand-labelled answer key written from the public RFP text (page numbers are PDF pages). Matching is keyword based: an item counts as found when ALL keywords of ANY alternative appear (case-insensitive) in the system output, and, where a page is given, the output cites that page +/- 1.",
+  "facts": {
+    "champaign_CCMS.pdf": {
+      "issuer": [["champaign"]],
+      "submission_deadline": [["august 28, 2025"], ["aug", "28", "2025"], ["2025-08-28"], ["08/28/2025"]],
+      "questions_deadline": [["july 29, 2025"], ["july 29"], ["2025-07-29"], ["07/29/2025"]],
+      "pre_proposal_meeting": [["july 15"], ["2025-07-15"], ["07/15/2025"]],
+      "contact": [["offerdahl"], ["berrydunn"]],
+      "submission_method": [["hard copy"], ["usb"], ["three-ring"], ["binder"]],
+      "proposal_validity": [["180"]],
+      "deployment_model": [["saas"], ["software as a service"]],
+      "target_go_live": [["december 2026"], ["2026-12"], ["dec 2026"]]
+    },
+    "detroit_RFP184578.pdf": {
+      "issuer": [["detroit"]],
+      "rfp_number": [["184578"]],
+      "submission_deadline": [["july 8, 2024"], ["july 8"], ["2024-07-08"], ["07/08/2024"]],
+      "questions_deadline": [["june 21"], ["2024-06-21"], ["06/21/2024"]],
+      "pre_proposal_meeting": [["may 7"], ["2024-05-07"], ["05/07/2024"]],
+      "submission_method": [["supplier portal"], ["portal"]]
+    }
+  },
+  "requirements": {
+    "doc": "champaign_CCMS.pdf",
+    "items": [
+      {"id": "hosting-us", "page": 12, "any": [["contiguous"], ["host", "united states"], ["hosting location"]]},
+      {"id": "hard-copy", "page": 24, "any": [["hard copy"], ["binder"]]},
+      {"id": "usb", "page": 24, "any": [["usb"], ["removable"], ["electronic version"]]},
+      {"id": "no-email", "page": 24, "any": [["email"]]},
+      {"id": "excel-attachments", "page": 24, "any": [["excel"]]},
+      {"id": "validity-180", "page": 22, "any": [["180"]]},
+      {"id": "pm-plan", "page": 15, "any": [["project management plan"], ["implementation project plan"]]},
+      {"id": "data-conversion", "page": 13, "any": [["data conversion"], ["legacy"], ["archiv"]]},
+      {"id": "training-plan", "page": 16, "any": [["training plan"]]},
+      {"id": "risk-register", "page": 16, "any": [["risk register"]]},
+      {"id": "upgrades", "page": 16, "any": [["upgrade"]]},
+      {"id": "quarterly-review", "page": 17, "any": [["quarter"]]},
+      {"id": "personnel", "page": 16, "any": [["personnel"], ["replace"]]},
+      {"id": "indemnify", "page": 27, "any": [["indemnif"]]},
+      {"id": "records-3y", "page": 27, "any": [["three years"], ["3 years"], ["records"]]},
+      {"id": "signature", "page": 27, "any": [["power of attorney"], ["authorized"], ["executed"]]},
+      {"id": "confidential", "page": 28, "any": [["confidential"]]},
+      {"id": "data-return-15", "page": 30, "any": [["15"], ["fifteen"]]},
+      {"id": "dr-plan", "page": 30, "any": [["disaster recovery"]]},
+      {"id": "daily-backup", "page": 30, "any": [["back up", "daily"], ["backup", "daily"], ["backed up"]]},
+      {"id": "continental-us", "page": 30, "any": [["continental"]]},
+      {"id": "deployment-model", "page": 12, "any": [["deployment model"], ["licensing model"]]},
+      {"id": "county-resources", "page": 12, "any": [["resource"]]},
+      {"id": "go-live-dates", "page": 13, "any": [["go-live"], ["phase"]]},
+      {"id": "no-contact", "page": 8, "any": [["contact"]]},
+      {"id": "non-discrimination", "page": 28, "any": [["discriminat"]]},
+      {"id": "patents", "page": 29, "any": [["patent"], ["copyright"]]},
+      {"id": "demonstrations", "page": 19, "any": [["demonstration"]]},
+      {"id": "no-subset", "page": 11, "any": [["subset"], ["best of breed"]]},
+      {"id": "prime-vendor", "page": 11, "any": [["prime"], ["partnership"]]}
+    ]
+  },
+  "compliance": {
+    "_note": "Expected status of OUR fictional company (data/knowledge_base) for requirements found above. A prediction counts as correct when it is in the expected set.",
+    "items": [
+      {"id": "hosting-us", "expected": ["met"]},
+      {"id": "continental-us", "expected": ["met"]},
+      {"id": "dr-plan", "expected": ["met"]},
+      {"id": "daily-backup", "expected": ["met"]},
+      {"id": "upgrades", "expected": ["met"]},
+      {"id": "quarterly-review", "expected": ["met"]},
+      {"id": "personnel", "expected": ["met"]},
+      {"id": "records-3y", "expected": ["met"]},
+      {"id": "pm-plan", "expected": ["met"]},
+      {"id": "training-plan", "expected": ["met"]},
+      {"id": "risk-register", "expected": ["met"]},
+      {"id": "data-conversion", "expected": ["met"]},
+      {"id": "patents", "expected": ["met", "partial"]},
+      {"id": "validity-180", "expected": ["gap", "partial"]},
+      {"id": "data-return-15", "expected": ["gap", "partial"]},
+      {"id": "indemnify", "expected": ["gap", "partial"]},
+      {"id": "no-subset", "expected": ["gap", "partial"]}
+    ]
+  },
+  "risks": {
+    "doc": "champaign_CCMS.pdf",
+    "items": [
+      {"id": "indemnification", "any": [["indemnif"]]},
+      {"id": "validity", "any": [["180"], ["validity"]]},
+      {"id": "data-return", "any": [["15", "day"], ["fifteen"]]},
+      {"id": "schedule", "any": [["go-live"], ["december 2026"], ["timeline"], ["14", "month"]]},
+      {"id": "jury-scope", "any": [["jury"], ["subset"]]},
+      {"id": "governing-law", "any": [["illinois"], ["governing law"]]},
+      {"id": "submission-format", "any": [["hard copy"], ["usb"], ["binder"]]}
+    ]
+  },
+  "qa": [
+    {"id": "q01", "doc": "champaign_CCMS.pdf", "question": "When are proposals due for the Champaign County court case management system RFP?", "reference": "Thursday, August 28, 2025 at 4:00 p.m. Central Time.", "pages": [1, 7]},
+    {"id": "q02", "doc": "champaign_CCMS.pdf", "question": "Who should vendors send questions about the Champaign County RFP to?", "reference": "By email only to BerryDunn, Kate Offerdahl-Joyce (kate.offerdahl-joyce@berrydunn.com).", "pages": [1, 7]},
+    {"id": "q03", "doc": "champaign_CCMS.pdf", "question": "Which deployment model does Champaign County prefer?", "reference": "A Software as a Service (SaaS) model, though it will consider on-premise and proposer-hosted models.", "pages": [12]},
+    {"id": "q04", "doc": "champaign_CCMS.pdf", "question": "How long must proposals remain valid?", "reference": "A minimum of 180 calendar days after the proposal due date.", "pages": [22]},
+    {"id": "q05", "doc": "champaign_CCMS.pdf", "question": "How many points is the Functionality criterion worth in short-list scoring?", "reference": "35 points.", "pages": [19]},
+    {"id": "q06", "doc": "champaign_CCMS.pdf", "question": "What legacy system does Champaign County use today?", "reference": "JANO Technologies eMagnus MultiCourt, deployed in 2008 on an IBM iSeries AS400 with a DB2 database.", "pages": [14]},
+    {"id": "q07", "doc": "champaign_CCMS.pdf", "question": "Within how many days must the contractor make County data available after termination?", "reference": "Within fifteen (15) days, in a machine-readable format, at no cost.", "pages": [30]},
+    {"id": "q08", "doc": "champaign_CCMS.pdf", "question": "How many named users does the County expect?", "reference": "Approximately 92 named users.", "pages": [13]},
+    {"id": "q09", "doc": "champaign_CCMS.pdf", "question": "When does the County want to go live?", "reference": "Implementation would begin in January 2026 with a target go-live of December 2026 for all modules.", "pages": [14]},
+    {"id": "q10", "doc": "champaign_CCMS.pdf", "question": "Where must County data be stored and processed?", "reference": "Only within the continental United States.", "pages": [30, 12]},
+    {"id": "q11", "doc": "detroit_RFP184578.pdf", "question": "When are proposals due for Detroit RFP 184578-2 and where are they submitted?", "reference": "July 8, 2024 at 3pm EDT, uploaded in the City's Supplier Portal.", "pages": [1]},
+    {"id": "q12", "doc": "detroit_RFP184578.pdf", "question": "When was the Detroit pre-proposal conference held?", "reference": "Tuesday, May 7, 2024 at 11am EDT on MS Teams.", "pages": [1]},
+    {"id": "q13", "doc": "kb", "question": "What is our recovery point objective and recovery time objective?", "reference": "RPO of 1 hour and RTO of 4 hours.", "pages": []},
+    {"id": "q14", "doc": "kb", "question": "How long are our proposals valid by default?", "reference": "90 days from the submission date unless the CFO approves longer.", "pages": []},
+    {"id": "q15", "doc": "champaign_CCMS.pdf", "question": "What liquidated damages per day does the Champaign County RFP impose for late delivery?", "reference": "NOT_FOUND", "pages": []}
+  ]
+}

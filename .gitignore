@@ -1,0 +1,20 @@
+# runtime data (DB, Qdrant, uploads) is rebuilt by backend/scripts/seed.py
+data/runtime/
+.scratch/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+# frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+frontend/tsconfig.tsbuildinfo
+# models / weights
+models/*.onnx
+models/cache/
+models/*.onnx
+demo/_raw/
+test-results/
+data/knowledge_base/~$*
