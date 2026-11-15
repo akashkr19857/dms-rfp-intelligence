@@ -1,157 +1,130 @@
-# DocBrain — Enterprise RAG with Evaluation
+# DMS RFP Intelligence System
 
-**Ask your company's PDFs in plain English and get answers with page-level citations, an honest "not found" when the
-documents don't say, per-workspace access control, and quality measured on every release. Runs 100% locally.**
+**GenAI-powered RFP / tender intelligence.** Upload a tender and get its key facts, every bidder requirement, a compliance
+matrix checked against your own company knowledge base, a risk & gap register, a bid/no-bid score and a cited first draft
+of the proposal response. Every finding links to the exact page it came from. Runs fully on a local LLM.
 
-![DocBrain demo](demo/demo.gif)
+![demo](demo/demo.gif)
 
-▶ Full demo video: [`demo/demo.mp4`](demo/demo.mp4)
+▶ **Full demo video:** [`demo/demo.mp4`](demo/demo.mp4)
 
 ## The problem
-Companies keep their knowledge in thousands of PDFs: policies, frameworks, contracts, reports. Finding one answer
-means opening many files, and generic LLM chatbots answer confidently even when they are wrong. Teams need answers
-they can verify in seconds, that respect who may see which document, and a number that says how often the system is right.
 
-## Features
-- **Ingestion of real-world PDFs**: text with layout boxes, ruled tables → Markdown, **scanned pages → OCR**
-  (RapidOCR / PP-OCR, column-aware reading order). Chunks keep page + section metadata and never cross a page.
-- **Hybrid retrieval**: BM25 + dense vectors (`nomic-embed-text`, Qdrant embedded) fused with Reciprocal Rank Fusion,
-  then a **cross-encoder reranker** (`BAAI/bge-reranker-base`).
-- **Grounded answers** from local `qwen2.5:7b` (Ollama), streamed over WebSocket, with **clickable citations that open
-  the PDF page with the cited passage highlighted**.
-- **"Not found in your documents" path**: a reranker-score gate (no LLM call) plus an LLM refusal rule.
-- **Agent mode (LangGraph)**: query rewriting → planning → multi-hop sub-question loop or a
-  **compare-two-documents tool** → cited synthesis; every step and its timing is shown in the UI.
-- **Role-based access**: documents live in workspaces; the workspace filter is applied inside the Qdrant and BM25
-  queries, so a user can never retrieve another workspace's text.
-- **Evaluation**: 45-question hand-written gold set, retrieval hit@k ablation, answer correctness, faithfulness /
-  hallucination rate, context recall, not-found accuracy, latency p50/p95 — stored as a history per release.
-- **Observability**: every query is traced (latency per stage, tokens, retrieved chunks with BM25/vector/rerank
-  ranks, agent steps), with a live usage page.
-- **Dashboard** (Next.js + Tailwind + Recharts): Chat, Documents (upload with live ingest progress, page preview),
-  Evaluation, Usage & traces; dark/light, responsive.
+Bid teams spend days reading 30–200 page RFPs to find what is required, whether they can comply, and what could
+disqualify them, then copy-paste old proposals into a new response. Generic chatbots hallucinate and can't show where
+an answer came from, which is unacceptable for documents with legal and financial consequences.
+
+## What it does
+
+| Feature | How |
+|---|---|
+| **Document intelligence** | PDF (text, tables, scanned pages via OCR) and DOCX parsing; section-aware chunks that never cross a page, so every citation is page-exact |
+| **Key facts** | Issuer, deadlines, pre-proposal meeting, contact, submission method, validity, deployment, timeline, with source page |
+| **Evaluation criteria** | Scoring criteria and points, with source page |
+| **Requirement extraction** | Every obligation on the bidder: categorised (functional, technical, security, data, legal, commercial, submission, ...), mandatory vs desirable, de-duplicated, with page |
+| **Compliance / eligibility analysis** | Each requirement checked against the organisational knowledge base with RAG: *met / partial / gap / unknown* + evidence + KB citation; bid team can override |
+| **Risk & gap detection** | RFP clauses compared with our standard terms (liability, validity, data exit, schedule, scope, hosting, law, pricing, insurance, submission); false alarms removed by cross-checking against the compliance results |
+| **Bid / no-bid score** | Transparent formula: 70% weighted compliance of mandatory requirements + 30% risk exposure |
+| **Proposal response generation** | 8 sections drafted from the reusable knowledge base with `[K#]` / `[R#]` citations; missing facts become `[Bid team to confirm: ...]` instead of being invented; Word export with compliance matrix and risk register |
+| **Ask the RFP** | Grounded Q&A over the RFP + knowledge base with page citations, or an explicit "not found" |
+| **Role-based access** | Bid manager / pre-sales / legal reviewer (reviewer cannot see the knowledge base or draft proposals) |
+| **Evaluation built in** | Hand-labelled answer key from the real RFP text; results shown in the dashboard |
 
 ## Architecture
+
 ```mermaid
 flowchart LR
-  PDF[PDF] --> X[PyMuPDF text + tables / RapidOCR for scans] --> C[page-aware chunks] --> E[nomic-embed-text]
-  E --> Q[(Qdrant)]
-  C --> S[(SQLite)]
-  U[Next.js :3060] -- WebSocket --> A[FastAPI :8060]
-  A --> R{RBAC: user → workspaces}
-  R --> B[BM25] & V[vector search]
-  B & V --> F[RRF] --> RR[bge-reranker] --> G{score gate}
-  G -- low --> NF[not found]
-  G -- ok --> L[qwen2.5:7b] --> CI[citations → page highlight]
-  A --> AG[LangGraph agent: rewrite → plan → multi-hop / compare tool → synthesize]
+  U[RFP / KB upload<br/>PDF · DOCX] --> P[Parse + chunk<br/>page-exact] --> I[(BM25 + Qdrant vectors)]
+  I --> H[Hybrid retrieval<br/>RRF fusion + cross-encoder reranker]
+  H --> A[Analysis pipeline<br/>facts → requirements → compliance → risks → score]
+  H --> G[Proposal writer + Ask]
+  L[[qwen2.5:7b · Ollama · JSON mode]] -.-> A & G
+  A & G --> API[FastAPI + WebSocket] --> UI[Next.js dashboard]
 ```
+
 Details and design decisions: [docs/architecture.md](docs/architecture.md).
 
+**RAG pipeline:** document parsing → chunking → embeddings (`nomic-embed-text`) → vector indexing (Qdrant) + BM25 →
+retrieval (reciprocal rank fusion) → reranking (`BAAI/bge-reranker-base`) → LLM response generation with source-grounded,
+page-level references.
+
 ## Results (measured)
-Hardware: **NVIDIA RTX 4060 Laptop (8 GB), Intel i5-12450H, Windows 11**; all models local (qwen2.5:7b Q4 via
-Ollama, nomic-embed-text, bge-reranker-base fp16). Corpus: 4 public NIST PDFs, 153 pages incl. a 9-page scanned PDF.
-Gold set: 45 questions (factual, table, OCR, multi-hop, compare, unanswerable, access-control).
 
-| Release | Pipeline | Hit@5 | Correctness | Faithfulness | Hallucination rate | Not-found accuracy | Latency p50 | Latency p95 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| v0.1.0 | vector only | 80.0% | 70.0% | 98.3% | 5.7% | 100.0% | 3.8 s | 19.8 s |
-| v0.2.0 | hybrid+rerank | 92.5% | 82.5% | 97.4% | 7.7% | 80.0% | 4.8 s | 7.3 s |
-| v0.3.0 | agent | 90.0% | 81.2% | 99.1% | 2.6% | 100.0% | 6.2 s | 11.6 s |
+RESULTS_TABLE
 
-Retrieval ablation (gold page in top-5, 40 answerable questions, no LLM):
-
-| Retriever | Hit@1 | Hit@3 | Hit@5 | MRR | Retrieval latency p50 |
-|---|---|---|---|---|---|
-| bm25 | 50.0% | 80.0% | 82.5% | 0.631 | 2 ms |
-| vector | 57.5% | 77.5% | 80.0% | 0.667 | 43 ms |
-| hybrid | 60.0% | 80.0% | 85.0% | 0.702 | 42 ms |
-| hybrid+rerank | 67.5% | 85.0% | 92.5% | 0.777 | 323 ms |
-
-Honest notes:
-- The judge is the same local qwen2.5:7b (temperature 0); use the scores to compare releases, not as absolute truth.
-- Latency was measured while other projects shared this laptop's GPU/CPU (and the eval waited on a shared GPU lock per question).
-- Known misses in the hybrid release: one subcategory mix-up (RC.CO-03 given for RC.RP-03), a table question the
-  model refused, and the access-control question where the user without access got a hedged non-answer instead of
-  the exact "not found" message (no text from the other workspace was retrieved).
-
-Full tables, metric definitions, per-category scores, edge and ingestion numbers: **[docs/BENCHMARKS.md](docs/BENCHMARKS.md)**.
+Full per-item results (every requirement, status, risk and answer): **Evaluation** page in the app, or
+[`backend/eval/results/`](backend/eval/results). Method and caveats: [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 ## Tech stack
-Python 3.11 · FastAPI · WebSocket · LangGraph · Ollama (qwen2.5:7b, nomic-embed-text) · Qdrant (embedded) · rank-bm25 ·
-sentence-transformers cross-encoder · PyMuPDF · RapidOCR (PP-OCR ONNX) · SQLAlchemy + SQLite · ONNX Runtime ·
-Next.js 15 · React 19 · Tailwind · shadcn/ui-style components · Recharts · pytest · Playwright.
+
+Python 3.11 · FastAPI · SQLAlchemy/SQLite · Qdrant · rank-bm25 · sentence-transformers (cross-encoder) · PyMuPDF ·
+RapidOCR · python-docx · LangGraph · Ollama (`qwen2.5:7b`, `nomic-embed-text`) · Next.js 15 · React 19 · Tailwind ·
+Recharts · Playwright · pytest · Docker.
 
 ## Quick start
-### Windows (one click)
-Prerequisites: [Ollama](https://ollama.com) running, Python 3.11 with `pip install -r requirements.txt`
-(or the shared venv), Node 22.
+
+**Windows (one click):** install [Ollama](https://ollama.com), Python 3.11 and Node 22, then
+
 ```bat
+pip install -r requirements.txt
+python -m playwright install chromium
 run_demo.bat
 ```
-It pulls the models if missing, downloads the public PDFs, builds the index on first run (a few minutes, OCR is
-CPU-bound), starts the API on http://localhost:8060 and the dashboard on http://localhost:3060.
-Pick a demo user: **alice** (ai-governance), **bob** (cybersecurity) or **admin** (both). Demo sign-in has no
-passwords; production would plug SSO/OIDC into `backend/app/main.py: current_user`.
 
-### Linux / macOS
+It pulls the models, downloads the public RFPs, builds the sample knowledge base, indexes everything and opens
+http://localhost:3200. Sign in as **Priya (Bid Manager)**, open a tender and click **Analyse RFP**.
+
+**Linux / macOS:**
+
 ```bash
-ollama pull qwen2.5:7b && ollama pull nomic-embed-text
 pip install -r requirements.txt
+ollama pull qwen2.5:7b && ollama pull nomic-embed-text
 python data/download_data.py && python backend/scripts/seed.py
-(cd backend && uvicorn app.main:app --port 8060) &
+python backend/scripts/analyze.py all            # optional: analyse all tenders up front
+uvicorn app.main:app --app-dir backend --port 8200 &
 cd frontend && npm install && npm run build && npm run start
 ```
 
-### Docker
-`docker compose up --build` (Ollama + API + dashboard). The compose file and Dockerfiles are written and
-syntax-checked but **were not run**: Docker is not installed on the development machine.
-
-### Re-run the evaluation
-```bash
-python backend/eval/run_eval.py --release v0.2.0 --label "hybrid+rerank"
-python backend/eval/make_benchmarks.py
-```
-
-## Edge deployment
-`edge/export_reranker_onnx.py` exports the reranker to ONNX, makes an int8 copy, checks score agreement and
-benchmarks it. Set `DOCBRAIN_RERANK_PROVIDER=onnx` to serve with the ONNX model. Measured for reranking 20 candidates:
-
-| Runtime | p50 | p95 | Max logit diff vs PyTorch fp32 | Same top-1 |
-|---|---|---|---|---|
-| pytorch_cpu_fp32 | 4297.9 ms | 4938.6 ms | 0.0 | True |
-| onnxruntime_cpu_fp32 | 3286.9 ms | 3891.8 ms | 0.0 | True |
-| onnxruntime_cpu_int8 | 2216.2 ms | 2330.9 ms | 1.0006 | True |
-| pytorch_cuda_fp16 | 23.0 ms | 24.3 ms | 0.0081 | True |
-
-A Jetson Orin guide and `edge/Dockerfile.jetson` are included in [edge/JETSON.md](edge/JETSON.md) — **not tested on a
-physical Jetson**.
+**Docker:** `docker compose up --build` (API :8200, dashboard :3200, Ollama with GPU). The compose file is written and
+syntax-checked but was not run on the development laptop, which has no Docker.
 
 ## Tests
-```bash
-python -m pytest                      # unit + API tests, no GPU/Ollama needed (fake LLM, embedder, reranker)
-python -m pytest tests/e2e -p no:cacheprovider   # Playwright E2E against the running app
-```
-Current status: **__PYTEST__**, **__E2E__**.
 
-## Screenshots
-| | |
-|---|---|
-| ![chat](demo/screenshots/02-chat-citations.png) | ![agent](demo/screenshots/04-agent-compare.png) |
-| ![ocr](demo/screenshots/03-ocr-source.png) | ![documents](demo/screenshots/05-documents.png) |
-| ![evaluation](demo/screenshots/06-evaluation.png) | ![usage](demo/screenshots/07-usage-traces.png) |
+```bash
+python -m pytest                      # 52 tests: parsing, DOCX, retrieval, RAG, RFP pipeline, proposal export, API, RBAC, retry
+python -m pytest tests/e2e            # Playwright end-to-end test against the running app
+python backend/eval/run_eval.py --release v1.0.0 --label baseline   # accuracy evaluation (local LLM)
+```
+
+Unit tests use a scripted fake LLM, embedder and reranker, so they run in seconds without a GPU.
 
 ## Data
-Public-domain NIST publications (AI RMF 1.0, Generative AI Profile, CSF 2.0, a scanned copy of the CSF 2.0 Small
-Business Quick-Start Guide). Sources and licence: [data/SOURCES.md](data/SOURCES.md).
 
-## Roadmap
-- SSO/OIDC and document-level permissions inside a workspace
-- Incremental re-indexing and de-duplication across document versions
-- Separate, stronger judge model for evaluation; RAGAS integration
-- OCR on GPU and table structure recognition for borderless tables
-- Answer caching and a smaller model profile for CPU-only deployments
+* **RFPs:** three real public solicitations from US local governments (Champaign County IL, City of Detroit, City of
+  Tacoma), see [data/SOURCES.md](data/SOURCES.md).
+* **Knowledge base:** a **fictional** vendor ("Nimbus JusticeTech Solutions") generated by
+  [`data/make_knowledge_base.py`](data/make_knowledge_base.py), designed to meet some requirements and miss others so the
+  compliance and risk analysis has known ground truth. Replace it with your own company documents.
+
+## Screenshots
+
+| | |
+|---|---|
+| ![tenders](demo/screenshots/01_tenders.png) | ![overview](demo/screenshots/02_overview.png) |
+| ![requirements](demo/screenshots/03_requirements.png) | ![risks](demo/screenshots/05_risks.png) |
+| ![proposal](demo/screenshots/06_proposal.png) | ![evaluation](demo/screenshots/08_evaluation.png) |
+
+## Limitations & roadmap
+
+* A 7B local model is fast and private but not perfect: about 1 in 8 labelled requirements is missed and compliance
+  needs human review, which is why every status can be overridden. A larger model (or an API model behind the same
+  interface) improves recall.
+* Analysis takes ~9 minutes for a 30-page RFP on a laptop GPU; batching on a server GPU or vLLM would cut this sharply.
+* Next: Excel requirement-matrix import/export (many RFPs ship Attachment B as .xlsx), clause library for past answers,
+  SSO, multi-tenant workspaces.
 
 ---
-Built by **Akash Kumar** · MIT licence
 
-**Need this for your business? Contact Akash Kumar: akashkr19857@gmail.com · linkedin.com/in/akash-kumar-883220192**
+Built by **Akash Kumar**: AI engineer for computer vision, GenAI, RAG and AI agents.
+Need this for your business? **akashkr19857@gmail.com** · [LinkedIn](https://www.linkedin.com/in/akash-kumar-883220192)
+· [GitHub](https://github.com/akashkr19857)

@@ -40,24 +40,32 @@ standard terms or needs negotiation or extra cost; low = needs attention). Use "
 Return at most 2 risks. If there is no real risk for this theme, return an empty list.
 Reply as JSON: {"risks": [ ... ]}"""
 
-VERIFY_SYSTEM = """You double-check one candidate bid risk found by another analyst. You get the RFP clause [R],
-our company's standard position [K] (may be empty) and the candidate risk.
-Answer "keep": false when ANY of these is true:
-- our position already satisfies the RFP clause (e.g. AWS GovCloud US-East/US-West IS inside the continental United
-  States; having a documented, tested disaster recovery plan satisfies "have and follow a disaster recovery plan";
-  keeping records longer than required satisfies a retention minimum);
-- it is a standard issuer right or boilerplate (right to reject proposals, no obligation to award, force majeure,
-  evaluation method) that creates no specific obligation or exposure for us;
-- the candidate misreads the clause.
-Otherwise answer "keep": true. Reply as JSON: {"keep": true|false, "reason": "<one sentence>"}"""
+def cross_check(doc_id: int, risks: list[dict], min_overlap: float = 0.5) -> list[dict]:
+    """Drop risks that the compliance stage already disproved.
 
+    A risk is matched to the extracted requirements on the same RFP page that share most of their words with it. If
+    every matched requirement was judged "met" against the knowledge base, the risk is a false alarm (e.g. "data
+    storage conflict" when our hosting already satisfies the continental-US requirement). Risks without a matching
+    requirement (boilerplate, deadlines, terms the extractor kept elsewhere) are kept.
+    """
+    from .requirements import _tokens
 
-def verify_risk(risk: dict, rhit, khits, counter: CallCounter | None = None) -> bool:  # noqa: ANN001
-    position = "\n".join(f"[K] {h.text[:700]}" for h in khits) or "(none)"
-    user = (f"RFP clause:\n[R] {rhit.text[:1100]}\n\nOur standard position:\n{position}\n\n"
-            f"Candidate risk: {risk['title']}: {risk['description']}")
-    data = llm_json(VERIFY_SYSTEM, user, counter, max_tokens=150)
-    return bool(data.get("keep", True))
+    with session() as db:
+        reqs = [r for r in db.query(Requirement).filter(Requirement.doc_id == doc_id).all() if r.kind == "capability"]
+    kept: list[dict] = []
+    for risk in risks:
+        rt = _tokens(f"{risk['title']} {risk['description']}")
+        matched = []
+        for r in reqs:
+            if r.page != risk["page"]:
+                continue
+            qt = _tokens(r.text)
+            if qt and len(rt & qt) / len(qt) >= min_overlap:
+                matched.append(r)
+        if matched and all(r.status == "met" for r in matched):
+            continue
+        kept.append(risk)
+    return kept
 
 
 SEVERITIES = ("high", "medium", "low")
@@ -86,10 +94,6 @@ def detect_risks(doc_id: int, counter: CallCounter | None = None,
             src = pick(rhits, r.get("rfp_source")) or rhits[:1]
             sev = str(r.get("severity", "medium")).lower()
             cat = str(r.get("category", "compliance")).lower()
-            used_kb = pick(khits, r.get("kb_sources", [])) or khits
-            if not verify_risk({"title": title, "description": str(r.get("description", ""))}, src[0], used_kb, counter):
-                titles.discard(title.lower())
-                continue
             risks.append({"title": title, "theme": theme, "category": cat if cat in CATS else "compliance",
                           "severity": sev if sev in SEVERITIES else "medium",
                           "description": str(r.get("description", ""))[:800],
@@ -98,7 +102,7 @@ def detect_risks(doc_id: int, counter: CallCounter | None = None,
                           "kb_sources": [source_ref(h) for h in pick(khits, r.get("kb_sources", []))]})
         if on_progress:
             on_progress((i + 1) / len(RISK_THEMES))
-    return risks
+    return cross_check(doc_id, risks)
 
 
 SEV_WEIGHT = {"high": 8, "medium": 3, "low": 1}

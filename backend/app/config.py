@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # Providers: "ollama" (default, local) or "fake" (deterministic, used by unit tests)
     llm_provider: str = "ollama"
     embed_provider: str = "ollama"
-    rerank_provider: str = "cross-encoder"  # cross-encoder | onnx | overlap (tests) | none
+    rerank_provider: str = "cross-encoder"  # cross-encoder | overlap (tests)
     rerank_device: str = "auto"  # auto | cuda | cpu
 
     ollama_url: str = "http://localhost:11434"

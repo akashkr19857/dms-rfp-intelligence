@@ -84,18 +84,6 @@ def test_extract_citations_dedupes():
     assert [c["n"] for c in cites] == [2, 1]
 
 
-ONNX_PATH = __import__("pathlib").Path(__file__).resolve().parents[1] / "edge" / "reranker.onnx"
-
-
-@pytest.mark.skipif(not ONNX_PATH.exists(), reason="run edge/export_reranker_onnx.py to create the ONNX reranker")
-def test_onnx_reranker_ranks_relevant_passage_first():
-    from app.retrieval.reranker import OnnxReranker
-
-    r = OnnxReranker("BAAI/bge-reranker-base", str(ONNX_PATH))
-    scores = r.score("verify backups before restoring", ["The integrity of backups is verified before restoration.", "Tiers describe rigor."])
-    assert scores[0] > 0.5 > scores[1]
-
-
 @pytest.mark.parametrize("text,expected", [
     ("The four functions of the AI RMF Core are not explicitly listed in the provided sources. However, ... [1]", True),
     ("The provided sources do not mention the EU AI Act fines.", True),

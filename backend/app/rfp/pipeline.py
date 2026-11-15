@@ -109,3 +109,21 @@ def analyze(doc_id: int) -> Analysis:
 def analyze_async(doc_id: int) -> None:
     _set(doc_id, status="queued", stage="queued", progress=0.0, error="")
     _executor.submit(analyze, doc_id)
+
+
+def rerun_risks(doc_id: int) -> Analysis:
+    """Re-run only risk detection + bid score for an analysed tender (used while tuning prompts)."""
+    counter = CallCounter()
+    t0 = time.perf_counter()
+    risks = detect_risks(doc_id, counter)
+    with session() as db:
+        db.query(Risk).filter(Risk.doc_id == doc_id).delete()
+        db.add_all(Risk(doc_id=doc_id, **{k: r[k] for k in ("title", "category", "severity", "description",
+                                                             "recommendation", "page", "chunk_id", "kb_sources")})
+                   for r in risks)
+        db.commit()
+        a = db.get(Analysis, doc_id)
+        timings = dict(a.timings)
+    timings["risks"] = round(time.perf_counter() - t0, 1)
+    timings["total"] = round(sum(v for k, v in timings.items() if k != "total"), 1)
+    return _set(doc_id, bid_score=bid_score(doc_id, risks), timings=timings, llm_calls=(a.llm_calls or 0))
