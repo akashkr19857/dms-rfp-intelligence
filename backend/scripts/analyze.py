@@ -11,16 +11,12 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "_shared"))
 
 from app.config import TENDERS_WS  # noqa: E402
 from app.db import Document, Requirement, Risk, session  # noqa: E402
 from app.rfp.pipeline import analyze, rerun_risks  # noqa: E402
 
-try:
-    from gpulock import gpu_lock
-except ImportError:  # outside the portfolio workspace
-    from contextlib import nullcontext as gpu_lock  # type: ignore[assignment]
+from contextlib import nullcontext as gpu_lock  # single-process: no cross-process GPU lock needed
 
 
 def main() -> None:

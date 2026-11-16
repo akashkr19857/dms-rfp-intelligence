@@ -3,7 +3,7 @@ REM DMS RFP Intelligence one-click demo (Windows). Starts the API on :8200 and t
 REM Needs: Ollama running with qwen2.5:7b and nomic-embed-text pulled; Node 22; Python 3.11 with requirements.txt.
 setlocal
 cd /d "%~dp0"
-set "PY=%~dp0..\_shared\venv\Scripts\python.exe"
+set "PY=%~dp0.venv\Scripts\python.exe"
 if not exist "%PY%" set "PY=python"
 
 echo [1/5] Checking Ollama models...

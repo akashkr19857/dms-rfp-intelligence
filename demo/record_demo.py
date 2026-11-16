@@ -2,7 +2,7 @@
 
     python demo/record_demo.py        → demo/demo.mp4, demo/demo.gif, demo/screenshots/*.png
 
-Uses the shared recorder (Playwright video + ffmpeg) in ../_shared/record_demo.py. Everything shown is the live app:
+Uses demo/recorder.py (Playwright video + ffmpeg). Everything shown is the live app:
 real public RFPs, real analysis results stored by the local LLM, a live Q&A call.
 """
 from __future__ import annotations
@@ -11,8 +11,8 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parents[1] / "_shared"))
-from record_demo import record  # noqa: E402
+sys.path.insert(0, str(HERE))
+from recorder import record  # noqa: E402
 
 WEB = "http://localhost:3200"
 SHOTS = HERE / "screenshots"

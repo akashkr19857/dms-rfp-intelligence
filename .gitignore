@@ -18,3 +18,5 @@ models/*.onnx
 demo/_raw/
 test-results/
 data/knowledge_base/~$*
+
+.venv/

@@ -25,17 +25,13 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[0]))
-sys.path.insert(0, str(HERE.parents[2] / "_shared"))
 
 from app.config import KB_WS, PROJECT_ROOT, TENDERS_WS, get_settings  # noqa: E402
 from app.db import Analysis, Document, EvalRun, Requirement, Risk, session  # noqa: E402
 from app.llm import get_llm, parse_json  # noqa: E402
 from eval.metrics import CORRECTNESS_PROMPT, percentile  # noqa: E402
 
-try:
-    from gpulock import gpu_lock
-except ImportError:
-    from contextlib import nullcontext as gpu_lock  # type: ignore[assignment]
+from contextlib import nullcontext as gpu_lock  # single-process: no cross-process GPU lock needed
 
 log = logging.getLogger("eval")
 GOLD = json.loads((HERE / "gold_rfp.json").read_text(encoding="utf-8"))
